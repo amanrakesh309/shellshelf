@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#101418" />
+<title>ShellShelf — alias launcher</title>
+<link rel="stylesheet" href="/static/styles.css" />
+<link rel="manifest" href="/static/manifest.webmanifest" />
+<link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
+</head>
+<body>
+<a class="skip-link" href="#shortcut-list">Skip to shortcuts</a>
+<header class="topbar">
+  <div class="brand">
+    <h1>ShellShelf</h1>
+    <p class="tagline">Browse, search, and explicitly launch your shell aliases.</p>
+  </div>
+  <div class="controls">
+    <label class="search-label" for="search">Search shortcuts</label>
+    <input id="search" type="search" placeholder="Search name or command…  ( / )" autocomplete="off" />
+    <label class="fav-filter"><input type="checkbox" id="fav-only" /> Favorites only</label>
+    <button id="btn-add" type="button">Add shortcut</button>
+    <button id="btn-import" type="button">Import aliases</button>
+  </div>
+</header>
+
+<div id="error-banner" class="banner error" role="alert" hidden></div>
+<div id="notice-banner" class="banner notice" role="status" hidden></div>
+
+<main>
+  <div id="loading" class="state" role="status">Loading shortcuts…</div>
+  <div id="empty-state" class="state" hidden>
+    <h2>No shortcuts yet</h2>
+    <p>Add your first shortcut or import aliases from your shell config. Files are only read as text — never executed or modified.</p>
+    <div class="empty-actions">
+      <button id="btn-empty-add" type="button">Add shortcut</button>
+      <button id="btn-empty-import" type="button">Import aliases</button>
+    </div>
+  </div>
+  <ul id="shortcut-list" aria-label="Shortcuts"></ul>
+</main>
+
+<!-- Detail / launch dialog -->
+<div id="detail-dialog" class="dialog-backdrop" hidden>
+  <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="detail-name">
+    <h2 id="detail-name"></h2>
+    <p id="detail-desc" class="muted"></p>
+    <dl class="detail-grid">
+      <div><dt>Command</dt><dd><code id="detail-command"></code></dd></div>
+      <div><dt>Launch mode</dt><dd id="detail-mode"></dd></div>
+      <div><dt>Source</dt><dd id="detail-source"></dd></div>
+    </dl>
+    <p id="detail-explain" class="explain"></p>
+    <label id="shell-ack-row" class="shell-ack" hidden>
+      <input type="checkbox" id="shell-ack" />
+      I understand this needs <code>sh -c</code> and I still want to run it.
+    </label>
+    <div class="dialog-actions">
+      <button id="btn-launch" type="button" class="primary">Launch now</button>
+      <button id="btn-detail-close" type="button">Close</button>
+    </div>
+    <div id="launch-output-wrap" hidden>
+      <h3>Output</h3>
+      <p id="launch-status" class="muted"></p>
+      <pre id="launch-stdout" aria-label="Command output"></pre>
+      <pre id="launch-stderr" class="stderr" aria-label="Command errors"></pre>
+    </div>
+  </section>
+</div>
+
+<!-- Add / edit dialog -->
+<div id="editor-dialog" class="dialog-backdrop" hidden>
+  <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="editor-title">
+    <h2 id="editor-title">Add shortcut</h2>
+    <form id="editor-form">
+      <label for="f-name">Name (required)</label>
+      <input id="f-name" name="name" required maxlength="100" />
+      <label for="f-command">Command (required)</label>
+      <input id="f-command" name="command" required maxlength="2000" placeholder="e.g. ls -la ~/Projects" />
+      <label for="f-mode">Launch mode</label>
+      <select id="f-mode" name="launch_mode">
+        <option value="terminal">Run command</option>
+        <option value="app">Open application / file</option>
+      </select>
+      <label for="f-desc">Description (optional)</label>
+      <input id="f-desc" name="description" maxlength="500" />
+      <label class="row"><input type="checkbox" id="f-fav" /> Favorite</label>
+      <ul id="form-errors" class="form-errors" aria-live="polite"></ul>
+      <div class="dialog-actions">
+        <button type="submit" class="primary">Save</button>
+        <button type="button" id="btn-editor-close">Cancel</button>
+      </div>
+    </form>
+  </section>
+</div>
+
+<!-- Import dialog -->
+<div id="import-dialog" class="dialog-backdrop" hidden>
+  <section class="dialog wide" role="dialog" aria-modal="true" aria-labelledby="import-title">
+    <h2 id="import-title">Import aliases</h2>
+    <p class="muted">Shell files are <strong>only read as text</strong>. Nothing is executed or modified. Only simple <code>alias name='command'</code> lines are offered for import.</p>
+    <label for="import-file">Shell configuration file</label>
+    <div class="row">
+      <select id="import-file"></select>
+      <button id="btn-preview" type="button">Preview</button>
+    </div>
+    <label for="import-text">Or paste alias lines</label>
+    <textarea id="import-text" rows="4" placeholder="alias ll='ls -la'"></textarea>
+    <div class="dialog-actions">
+      <button id="btn-preview-text" type="button">Preview pasted text</button>
+      <button id="btn-import-close" type="button">Close</button>
+    </div>
+    <div id="import-results" hidden>
+      <h3>Preview — select entries to import</h3>
+      <ul id="import-entries"></ul>
+      <div class="dialog-actions">
+        <button id="btn-do-import" type="button" class="primary">Import selected</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  ShellShelf macOS bundle template (Phase 8: documentation only).
+
+  A full double-clickable ShellShelf.app cannot be produced with the standard
+  library alone: it needs a bundler (py2app, Briefcase, or PyInstaller), which
+  requires `pip` installs that are unavailable in this environment and must not
+  be installed silently. To finish the macOS bundle on a Mac with Python:
+
+    1. `pip install py2app` (explicit user action, outside this repo)
+    2. Point its `plist` option at this file and its script at `app.py`
+       (or at the `dist/shellshelf.pyz` built by `packaging/build.py`).
+    3. Until then, run `python3 app.py` — it works on macOS as-is.
+
+  Until bundled, the app runs in the browser via `python3 app.py` (macOS
+  `open -a` launching is implemented in `shellshelf/launcher.py`).
+-->
+<plist version="1.0">
+<dict>
+  <key>CFBundleName</key>
+  <string>ShellShelf</string>
+  <key>CFBundleDisplayName</key>
+  <string>ShellShelf</string>
+  <key>CFBundleIdentifier</key>
+  <string>org.example.shellshelf</string>
+  <key>CFBundleVersion</key>
+  <string>0.1.0</string>
+  <key>CFBundleShortVersionString</key>
+  <string>0.1.0</string>
+  <key>CFBundlePackageType</key>
+  <string>APPL</string>
+  <key>LSMinimumSystemVersion</key>
+  <string>12.0</string>
+  <key>NSHighResolutionCapable</key>
+  <true/>
+</dict>
+</plist>

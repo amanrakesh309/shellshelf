@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=ShellShelf
+Comment=Browse, search, and explicitly launch your shell aliases
+# Adjust Exec/Icon paths to your checkout (or copy the pyz to a stable
+# location such as ~/.local/bin). Example for a user install:
+#   Exec=python3 /home/USER/Projects/Linux_Projects/AliasLauncher/dist/shellshelf.pyz
+Exec=python3 /opt/shellshelf/shellshelf.pyz
+TryExec=python3
+Icon=/opt/shellshelf/icon.svg
+Terminal=false
+Type=Application
+Categories=Utility;
+StartupWMClass=ShellShelf
